@@ -3,6 +3,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
 import { Header } from '../../components/Header'
 import { Siderbar } from '../../components/Sidebar'
 import { RiAddLine, RiPencilLine } from 'react-icons/ri'
+import { Pagination } from '../../components/Pagination'
 
 export default function UserList() {
     return (
@@ -54,6 +55,7 @@ export default function UserList() {
                             </Tr>
                         </Tbody>
                     </Table>
+                    <Pagination />
                 </Box>
             </Flex >
         </Box >
