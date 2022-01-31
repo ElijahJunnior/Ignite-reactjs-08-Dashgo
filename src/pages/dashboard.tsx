@@ -74,11 +74,11 @@ export default function Dashboard() {
             <Flex w='100%' my='6' maxWidth='1480px' mx='auto' px='6'>
                 <Siderbar />
                 <SimpleGrid flex='1' gap='4' minChildWidth='320px' align='flex-start'>
-                    <Box p='8' pb='4' bg='gray.800' borderRadius={8}>
+                    <Box p={['6', '8']} pb='4' bg='gray.800' borderRadius={8}>
                         <Text fontSize='lg' mb='4'>Inscritos da Semana</Text>
                         <Chart options={options} series={series} type='area' height='160px' />
                     </Box>
-                    <Box p='8' pb='4' bg='gray.800' borderRadius={8}>
+                    <Box p={['6', '8']} pb='4' bg='gray.800' borderRadius={8}>
                         <Text fontSize='lg' mb='4'>Taxa de Abertura</Text>
                         <Chart options={options} series={series} type='area' height='160px' />
                     </Box>
