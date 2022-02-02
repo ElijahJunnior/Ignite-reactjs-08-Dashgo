@@ -10,6 +10,8 @@ type SignInFormData = {
 export default function SignIn() {
 
   const { register, handleSubmit, formState } = useForm();
+  const { errors } = formState;
+  console.log(errors)
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
     // codigo para fazer uma função assincrona esperar por um determinado tempo
@@ -26,11 +28,17 @@ export default function SignIn() {
         <Stack spacing="4">
           <Input
             name="email" type="email" label='E-mail'
-            {...register('email')}
+            error={errors.email}
+            {...register('email', {
+              required: "Email obrigatorio"
+            })}
           />
           <Input
             name="password" type="password" label="Senha"
-            {...register('password')}
+            error={errors.password}
+            {...register('password', {
+              required: "Senha obrigatoria"
+            })}
           />
         </Stack>
         <Button
@@ -44,6 +52,6 @@ export default function SignIn() {
           Entrar
         </Button>
       </Flex>
-    </Flex >
+    </Flex>
   )
 }
