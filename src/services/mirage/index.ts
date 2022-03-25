@@ -32,7 +32,7 @@ export function makeServer() {
         },
         seeds(server) {
             // configura o mirage para criar 200 registros de user quando for iniciado
-            server.createList("user", 200)
+            server.createList("user", 10)
         },
         routes() {
             // raiz da url do mirage ex.: (localhost:3001/api/users)
