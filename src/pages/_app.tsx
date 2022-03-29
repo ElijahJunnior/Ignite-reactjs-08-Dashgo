@@ -1,9 +1,19 @@
+// REACT / NEXT
 import { AppProps } from 'next/app';
-import { theme } from '../styles/theme';
-import { ChakraProvider } from '@chakra-ui/react'
-import { SidebarDrawerProvider } from '../context/SidebarDrawerContext';
-import { makeServer } from '../services/mirage';
+
+// REACT QUERY
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+
+// FAKE API
+import { makeServer } from '../services/mirage';
+
+// CHAKRA E TEMA
+import { ChakraProvider } from '@chakra-ui/react'
+import { theme } from '../styles/theme';
+
+// COMPONENTES
+import { SidebarDrawerProvider } from '../context/SidebarDrawerContext';
 
 if (process.env.NODE_ENV == 'development') {
   makeServer();
@@ -19,6 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </SidebarDrawerProvider>
       </ChakraProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   )
 }

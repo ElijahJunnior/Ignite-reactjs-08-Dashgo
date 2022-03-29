@@ -12,7 +12,7 @@ import { useDragControls } from 'framer-motion'
 export default function UserList() {
 
     // usando o react query para armazenar o consumo no cash em um diretorio chamado users 
-    const { isLoading, data, error } = useQuery('users', async () => {
+    const { isLoading, isRefetching, data, error } = useQuery('users', async () => {
         // usando o fetch para consumir uma lista de users 
         const response = await fetch('http://localhost:3000/api/users');
         // convertendo o resultado em json
@@ -31,6 +31,8 @@ export default function UserList() {
         })
         // retornado o resultado para o react query
         return users;
+    }, {
+        staleTime: 1000 * 5
     })
 
     const isWideVersion = useBreakpointValue({
@@ -45,7 +47,13 @@ export default function UserList() {
                 <Siderbar />
                 <Box flex='1' borderRadius='8px' bg='gray.800' p='8'>
                     <Flex mb='8' justify='space-between' align='center'>
-                        <Heading size='lg' fontWeight='normal'>Usuários</Heading>
+                        <Heading size='lg' fontWeight='normal'>
+                            Usuários
+                            {/* {!!isFetching && !isLoading && ( */}
+                            {!!isRefetching && (
+                                <Spinner size="sm" ml="4" color="gray.500" />
+                            )}
+                        </Heading>
                         <Link href='/users/create' passHref>
                             <Button
                                 as='a' size='sm' fontSize='sm' colorScheme='pink'
