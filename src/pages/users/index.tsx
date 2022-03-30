@@ -8,32 +8,13 @@ import { Pagination } from '../../components/Pagination'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useDragControls } from 'framer-motion'
+import { api } from '../../services/api'
+import { useUsers } from '../../services/hooks/useUsers'
 
 export default function UserList() {
 
     // usando o react query para armazenar o consumo no cash em um diretorio chamado users 
-    const { isLoading, isRefetching, data, error } = useQuery('users', async () => {
-        // usando o fetch para consumir uma lista de users 
-        const response = await fetch('http://localhost:3000/api/users');
-        // convertendo o resultado em json
-        const data = await response.json();
-        const users = data.users.map(user => {
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric"
-                })
-            }
-        })
-        // retornado o resultado para o react query
-        return users;
-    }, {
-        staleTime: 1000 * 5
-    })
+    const { isLoading, isRefetching, data, error } = useUsers()
 
     const isWideVersion = useBreakpointValue({
         base: false,
