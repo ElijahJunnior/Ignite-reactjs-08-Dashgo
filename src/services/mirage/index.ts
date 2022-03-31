@@ -50,21 +50,21 @@ export function makeServer() {
                 // calcula o ultimo registro
                 const pageEnd = pageStart + Number(per_page);
                 // pega a lista do usuarios do mirage e corta ela para fazer a paginação
-                const users = this.serialize(schema.all('user'))
-                    .users.slice(pageStart, pageEnd);
+                const users = this.serialize(schema.all('user')).users.slice(pageStart, pageEnd);
                 // retorna o resultado da consulta 
                 return new Response(
                     // codigo de status da cunsulta 
                     200,
                     // adiciona headers a resposta
-                    // por boa pratica deve se adicionar oque não é o objetivo da consulta por header
-                    // informa ao usuario a quantidade total de registros
-                    { 'x-total-count': String(total) },
+                    {
+                        'x-total-count': String(total) // quantidade total de registros
+                    },
                     // objeto retornado no body da consulta 
-                    users
+                    { users }
                 )
 
             })
+            // CRUD de User - Usando padrão do mirage
             this.post('/users');
             this.put('/users');
             this.delete('/users');

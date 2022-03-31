@@ -1,7 +1,37 @@
 import { Box, Button, Stack } from '@chakra-ui/react';
 import { PaginationIten } from './PaginationItem';
 
-export function Pagination() {
+interface PaginationProps {
+    totalCountOfRegisters: number,
+    registeresPerPage?: number,
+    currentPage?: number,
+    onPageChange: (page: number) => void
+}
+
+function generatePagesArray(from: number, to: number) {
+    return [...new Array(to - from)]
+        .map((val, index) => {
+            return from + index + 1
+        })
+        .filter(page => page > 0);
+}
+
+const siblingsCount = 3;
+
+export function Pagination({
+    totalCountOfRegisters, registeresPerPage = 10, currentPage = 1, onPageChange
+}: PaginationProps) {
+
+    const lastPage = Math.floor(totalCountOfRegisters / registeresPerPage);
+
+    const previusPage = currentPage > 1
+        ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
+        : [];
+
+    const nextPage = currentPage < lastPage
+        ? generatePagesArray(currentPage, Math.min(currentPage + siblingsCount, lastPage))
+        : [];
+
     return (
         <Stack
             mt='8' spacing='6' direction={['column', 'row']}
@@ -11,13 +41,19 @@ export function Pagination() {
                 <strong>0</strong> - <strong>10</strong> de <strong>100</strong>
             </Box>
             <Stack direction='row' spacing='2'>
-                <PaginationIten pageNumber={1} isCurrent />
-                <PaginationIten pageNumber={2} />
-                <PaginationIten pageNumber={3} />
-                <PaginationIten pageNumber={4} />
-                <PaginationIten pageNumber={5} />
-                <PaginationIten pageNumber={6} />
+
+                {previusPage.length > 0 && previusPage.map(page => (
+                    <PaginationIten key={page} pageNumber={page} />
+                ))}
+
+                <PaginationIten pageNumber={currentPage} isCurrent />
+
+                {nextPage.length > 0 && nextPage.map(page => (
+                    <PaginationIten key={page} pageNumber={page} />
+                ))}
+
             </Stack>
         </Stack>
     )
+
 }

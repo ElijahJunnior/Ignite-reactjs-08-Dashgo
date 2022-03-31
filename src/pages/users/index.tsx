@@ -5,10 +5,6 @@ import { Header } from '../../components/Header'
 import { Siderbar } from '../../components/Sidebar'
 import { RiAddLine, RiPencilLine } from 'react-icons/ri'
 import { Pagination } from '../../components/Pagination'
-import { useEffect } from 'react'
-import { useQuery } from 'react-query'
-import { useDragControls } from 'framer-motion'
-import { api } from '../../services/api'
 import { useUsers } from '../../services/hooks/useUsers'
 
 export default function UserList() {
@@ -91,7 +87,11 @@ export default function UserList() {
                                         }
                                     </Tbody>
                                 </Table>
-                                <Pagination />
+                                <Pagination
+                                    totalCountOfRegisters={200}
+                                    currentPage={5}
+                                    onPageChange={() => { }}
+                                />
                             </>
                         )
                     }
