@@ -8,10 +8,21 @@ export type User = {
     createdAt: string
 }
 
+type GetUsersResponse = {
+    totalCount: number,
+    users: User[]
+}
+
 // função que acessa o webservice e busca os dados
-export async function getUsers(): Promise<User[]> {
+export async function getUsers(page: number): Promise<GetUsersResponse> {
     // usando o axios para consumir uma lista de users 
-    const { data } = await api.get('users');
+    const { data, headers } = await api.get('users', {
+        params: {
+            page
+        }
+    });
+    // pegando o tatal de registros no reader da resposta do consumo
+    const totalCount = Number(headers['x-total-count'])
     // tratando dados do usuario
     const users = data.users.map(user => {
         return {
@@ -26,13 +37,16 @@ export async function getUsers(): Promise<User[]> {
         }
     })
     // retornado o resultado para o react query
-    return users;
+    return {
+        users,
+        totalCount
+    };
 }
 
 // funcão que usa o react query para gerenciar os dados 
-export function useUsers() {
+export function useUsers(page: number) {
 
-    return useQuery('users', getUsers, {
+    return useQuery(['users', page], () => getUsers(page), {
         staleTime: 1000 * 5
     })
 

@@ -1,17 +1,29 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Text, useBreakpointValue } from '@chakra-ui/react'
-import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
+// NEXT / REACT 
+import { useState } from 'react'
 import Link from 'next/link'
+
+// CHAKRA 
+import { Box, Button, Checkbox, Flex } from '@chakra-ui/react'
+import { Heading, Icon, Spinner, Text, useBreakpointValue } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
+
+// REACT ICONS
+import { RiAddLine } from 'react-icons/ri'
+
+// COMPONENTS
 import { Header } from '../../components/Header'
 import { Siderbar } from '../../components/Sidebar'
-import { RiAddLine, RiPencilLine } from 'react-icons/ri'
-import { Pagination } from '../../components/Pagination'
 import { useUsers } from '../../services/hooks/useUsers'
+import { Pagination } from '../../components/Pagination'
 
 export default function UserList() {
 
-    // usando o react query para armazenar o consumo no cash em um diretorio chamado users 
-    const { isLoading, isRefetching, data, error } = useUsers()
+    const [page, setPage] = useState(1);
 
+    // usando o react query para armazenar o consumo no cash em um diretorio chamado users 
+    const { isLoading, isRefetching, data, error } = useUsers(page)
+
+    // cria uma variavel com o breackpoint atual parar usar no designer da tela 
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true
@@ -64,7 +76,7 @@ export default function UserList() {
                                     </Thead>
                                     <Tbody>
                                         {
-                                            data.map(user => (
+                                            data.users?.map(user => (
                                                 <Tr key={user.id}>
                                                     <Td px={['4', '4', '6']}>
                                                         <Checkbox colorScheme='pink' />
@@ -88,9 +100,9 @@ export default function UserList() {
                                     </Tbody>
                                 </Table>
                                 <Pagination
-                                    totalCountOfRegisters={200}
-                                    currentPage={5}
-                                    onPageChange={() => { }}
+                                    totalCountOfRegisters={data?.totalCount || 0}
+                                    currentPage={page}
+                                    onPageChange={setPage}
                                 />
                             </>
                         )

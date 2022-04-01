@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@chakra-ui/react';
+import { Box, Button, Stack, Text } from '@chakra-ui/react';
 import { PaginationIten } from './PaginationItem';
 
 interface PaginationProps {
@@ -16,7 +16,7 @@ function generatePagesArray(from: number, to: number) {
         .filter(page => page > 0);
 }
 
-const siblingsCount = 3;
+const siblingsCount = 1;
 
 export function Pagination({
     totalCountOfRegisters, registeresPerPage = 10, currentPage = 1, onPageChange
@@ -42,15 +42,33 @@ export function Pagination({
             </Box>
             <Stack direction='row' spacing='2'>
 
+                {currentPage > (1 + siblingsCount) && (
+                    <>
+                        <PaginationIten pageNumber={1} onPageChange={onPageChange} />
+                        {currentPage > (2 + siblingsCount) && (
+                            <Text color="gray.300" width="8" textAlign="center">...</Text>
+                        )}
+                    </>
+                )}
+
                 {previusPage.length > 0 && previusPage.map(page => (
-                    <PaginationIten key={page} pageNumber={page} />
+                    <PaginationIten key={page} pageNumber={page} onPageChange={onPageChange} />
                 ))}
 
-                <PaginationIten pageNumber={currentPage} isCurrent />
+                <PaginationIten pageNumber={currentPage} isCurrent onPageChange={onPageChange} />
 
                 {nextPage.length > 0 && nextPage.map(page => (
-                    <PaginationIten key={page} pageNumber={page} />
+                    <PaginationIten key={page} pageNumber={page} onPageChange={onPageChange} />
                 ))}
+
+                {(currentPage + siblingsCount) < lastPage && (
+                    <>
+                        {(currentPage + 1 + siblingsCount) < lastPage && (
+                            <Text color="gray.300" width="8" textAlign="center">...</Text>
+                        )}
+                        <PaginationIten pageNumber={lastPage} onPageChange={onPageChange} />
+                    </>
+                )}
 
             </Stack>
         </Stack>
