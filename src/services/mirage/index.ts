@@ -65,6 +65,7 @@ export function makeServer() {
 
             })
             // CRUD de User - Usando padrão do mirage
+            this.get('/users/:id');
             this.post('/users');
             this.put('/users');
             this.delete('/users');
