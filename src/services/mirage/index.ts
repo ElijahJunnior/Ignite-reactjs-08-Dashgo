@@ -1,4 +1,4 @@
-import { createServer, Factory, Model, Response } from 'miragejs';
+import { ActiveModelSerializer, createServer, Factory, Model, Response } from 'miragejs';
 import faker from 'faker';
 
 type User = {
@@ -9,9 +9,17 @@ type User = {
 
 export function makeServer() {
     const server = createServer({
+        // Active Model: é um modo de trabalhar com api onde varias entidades 
+        // relacionadas são enviadas para a api no mesmo consumo, que grava
+        // cada uma em sua respectiva tabela 
+        serializers: {
+            application: ActiveModelSerializer
+        },
+        // Modelo das entidades usadas nos consumos
         models: {
             user: Model.extend<Partial<User>>({})
         },
+        // Código responsável por criar registros para os consumos 
         factories: {
             user: Factory.extend({
                 name() {
@@ -30,6 +38,7 @@ export function makeServer() {
                 }
             })
         },
+        // Modo responsável por definir quantos registros serão criados para cada entidade
         seeds(server) {
             // configura o mirage para criar 200 registros de user quando for iniciado
             server.createList("user", 200)
