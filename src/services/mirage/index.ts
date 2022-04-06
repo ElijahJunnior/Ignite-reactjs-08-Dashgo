@@ -34,7 +34,7 @@ export function makeServer() {
                 // factory com camel case não vai gerar problemas
                 createdAt() {
                     // usa a bibliotec faker para gerar a data de criação do usuario
-                    return faker.date.recent(10);
+                    return faker.date.recent(10, new Date()).toString();
                 }
             })
         },

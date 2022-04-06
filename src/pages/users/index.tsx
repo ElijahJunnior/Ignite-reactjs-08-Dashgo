@@ -13,23 +13,31 @@ import { RiAddLine } from 'react-icons/ri'
 // COMPONENTS
 import { Header } from '../../components/Header'
 import { Siderbar } from '../../components/Sidebar'
-import { useUsers } from '../../services/hooks/useUsers'
+import { getUsers, useUsers } from '../../services/hooks/useUsers'
 import { Pagination } from '../../components/Pagination'
 import { queryClient } from '../../services/queryClient'
 import { api } from '../../services/api'
+import { GetServerSideProps } from 'next'
+
+// export default function UserList({ users }) {
 
 export default function UserList() {
 
     const [page, setPage] = useState(1);
 
+    // // usando o react query para armazenar o consumo no cash em um diretorio chamado users 
+    // const { isLoading, isRefetching, data, error } = useUsers(page, {
+    //     initialData: users
+    // });
+
     // usando o react query para armazenar o consumo no cash em um diretorio chamado users 
-    const { isLoading, isRefetching, data, error } = useUsers(page)
+    const { isLoading, isRefetching, data, error } = useUsers(page);
 
     // cria uma variavel com o breackpoint atual parar usar no designer da tela 
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true
-    })
+    });
 
     async function handlePrefetchUser(userId: string) {
 
@@ -127,3 +135,13 @@ export default function UserList() {
         </Box >
     )
 }
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//     const { users, totalCount } = await getUsers(1);
+//     console.log('log_result', users)
+//     return {
+//         props: {
+//             users
+//         }
+//     };
+// }

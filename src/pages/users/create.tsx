@@ -1,13 +1,25 @@
-import { Box, Divider, Flex, Heading, HStack, VStack, SimpleGrid, Button } from '@chakra-ui/react'
+// REACT / NEXT 
 import Link from 'next/link'
+import { useRouter } from 'next/router';
+
+// CHAKRA
+import { Box, Button, Divider, Flex, Heading } from '@chakra-ui/react';
+import { HStack, VStack, SimpleGrid } from "@chakra-ui/react";
+
+// REACT HOOK FORM / YUP 
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+// REACT QUERY
+import { queryClient } from '../../services/queryClient'
+import { useMutation } from 'react-query'
+
+// COMPONENTS
+import { Siderbar } from '../../components/Sidebar'
 import { Input } from '../../components/Form/Input'
 import { Header } from '../../components/Header'
-import { Siderbar } from '../../components/Sidebar'
-
-import { useForm, SubmitHandler } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-
+import { api } from '../../services/api'
 
 type UserCreateFormData = {
     name: string,
@@ -17,6 +29,22 @@ type UserCreateFormData = {
 }
 
 export default function UserCreate() {
+
+    const router = useRouter();
+
+    const createUser = useMutation(async (user: UserCreateFormData) => {
+        const response = await api.post('users', {
+            user: {
+                ...user,
+                created_at: new Date(),
+            }
+        });
+        return response.data.user;
+    }, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('users')
+        }
+    })
 
     const userCreateFormSchema = yup.object().shape({
         name: yup.string().required('Nome é obrigatório'),
@@ -31,10 +59,11 @@ export default function UserCreate() {
         resolver: yupResolver(userCreateFormSchema)
     });
 
-    const { errors } = formState
+    const { errors } = formState;
 
     const handleUserCreate: SubmitHandler<UserCreateFormData> = async (values) => {
-
+        await createUser.mutateAsync(values);
+        router.push('/users');
     }
 
     return (
